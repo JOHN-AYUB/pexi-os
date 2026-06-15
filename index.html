@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEXI OS — The Operating System for Building the Future</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { inter: ['Inter', 'sans-serif'] },
+      colors: {
+        pexi: {
+          bg: '#050505',
+          card: '#0a0a0a',
+          border: '#1a1a1a',
+          accent: '#3b82f6',
+          purple: '#8b5cf6',
+          cyan: '#06b6d4',
+          emerald: '#10b981',
+          pink: '#ec4899',
+          orange: '#f97316',
+        }
+      }
+    }
+  }
+}
+</script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: #050505; color: #ffffff; overflow-x: hidden; }
+  ::selection { background: rgba(59,130,246,0.3); color: #fff; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #050505; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+  /* Animated Background */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59,130,246,0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(139,92,246,0.06), transparent),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(6,182,212,0.06), transparent);
+  }
+
+  /* Glass Morphism */
+  .glass {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .glass-strong {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .glass-nav {
+    background: rgba(5,5,5,0.7);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Glow Effects */
+  .glow-blue { box-shadow: 0 0 40px rgba(59,130,246,0.15), 0 0 80px rgba(59,130,246,0.05); }
+  .glow-purple { box-shadow: 0 0 40px rgba(139,92,246,0.15), 0 0 80px rgba(139,92,246,0.05); }
+  .glow-cyan { box-shadow: 0 0 40px rgba(6,182,212,0.15), 0 0 80px rgba(6,182,212,0.05); }
+  .glow-emerald { box-shadow: 0 0 40px rgba(16,185,129,0.15), 0 0 80px rgba(16,185,129,0.05); }
+  .glow-pink { box-shadow: 0 0 40px rgba(236,72,153,0.15), 0 0 80px rgba(236,72,153,0.05); }
+
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-pink {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-emerald {
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-multi {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+  }
+
+  @keyframes dash {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes borderGlow {
+    0%, 100% { border-color: rgba(59,130,246,0.2); }
+    50% { border-color: rgba(139,92,246,0.4); }
+  }
+
+  .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+  .animate-fade-in-down { animation: fadeInDown 0.6s ease-out forwards; }
+  .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+  .animate-rotate-slow { animation: rotate-slow 20s linear infinite; }
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+  }
+
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
+  .delay-800 { animation-delay: 800ms; }
+
+  /* Card Hover Effects */
+  .card-hover {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(59,130,246,0.05);
+  }
+
+  .card-hover-blue:hover {
+    border-color: rgba(59,130,246,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(59,130,246,0.1);
+  }
+  .card-hover-purple:hover {
+    border-color: rgba(139,92,246,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.1);
+  }
+  .card-hover-cyan:hover {
+    border-color: rgba(6,182,212,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(6,182,212,0.1);
+  }
+  .card-hover-emerald:hover {
+    border-color: rgba(16,185,129,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(16,185,129,0.1);
+  }
+  .card-hover-pink:hover {
+    border-color: rgba(236,72,153,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(236,72,153,0.1);
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover {
+    box-shadow: 0 8px 30px rgba(59,130,246,0.35);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: #a3a3a3;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+  .btn-ghost:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+  /* Scroll Reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Orb backgrounds */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  /* Navigation Active */
+  .nav-link {
+    position: relative;
+    color: #a3a3a3;
+    transition: color 0.3s;
+    font-size: 13px;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+  .nav-link:hover { color: #ffffff; }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 1.5px;
+    background: #3b82f6;
+    transition: all 0.3s;
+    transform: translateX(-50%);
+  }
+  .nav-link:hover::after { width: 100%; }
+
+  /* Roadmap Line */
+  .roadmap-line {
+    position: relative;
+  }
+  .roadmap-line::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899, #f97316);
+    opacity: 0.3;
+  }
+
+  .roadmap-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: #050505;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  /* Feature icon container */
+  .icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,5,0.95);
+    backdrop-filter: blur(30px);
+    z-index: 100;
+    padding: 80px 24px 24px;
+  }
+  .mobile-menu.active { display: flex; flex-direction: column; }
+
+  /* Stat counter */
+  .stat-number {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Particle canvas */
+  #particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Section separator */
+  .section-sep {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+  }
+
+  /* Tag/Badge */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  /* Timeline connector */
+  .timeline-connector {
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(59,130,246,0.4), transparent);
+  }
+
+  /* iOS-style toggle */
+  .toggle-track {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .toggle-track.active { background: #3b82f6; }
+  .toggle-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .toggle-track.active .toggle-thumb { transform: translateX(20px); }
+
+  /* Notification dot */
+  .notif-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+    animation: pulse-glow 2s infinite;
+  }
+
+  @media (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .mobile-toggle { display: flex !important; }
+  }
+  @media (min-width: 769px) {
+    .mobile-toggle { display: none !important; }
+  }
+</style>
+</head>
+<body class="font-inter antialiased">
+
+<!-- Particle Canvas -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- Background Effects -->
+<div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+<div class="fixed inset-0 bg-gradient-radial pointer-events-none z-0"></div>
+
+<!-- Floating Orbs -->
+<div class="fixed top-20 left-10 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl pointer-events-none animate-pulse-glow"></div>
+<div class="fixed bottom-20 right-10 w-80 h-80 rounded-full bg-purple-500/5 blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay:1.5s"></div>
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyan-500/3 blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay:3s"></div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 group">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-shadow">
+        <span class="text-white font-bold text-xs tracking-tight">PX</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-white font-semibold text-sm tracking-tight leading-none">PEXI OS</span>
+        <span class="text-neutral-500 text-[9px] font-medium tracking-wider uppercase leading-none mt-0.5">BuildOS Ecosystem</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <div class="desktop-nav hidden md:flex items-center gap-1">
+      <a href="#about" class="nav-link px-3 py-2">About</a>
+      <a href="#features" class="nav-link px-3 py-2">Features</a>
+      <a href="#ai-modules" class="nav-link px-3 py-2">AI Modules</a>
+      <a href="#robotics" class="nav-link px-3 py-2">Robotics</a>
+      <a href="#smart-cities" class="nav-link px-3 py-2">Smart Cities</a>
+      <a href="#digital-twin" class="nav-link px-3 py-2">Digital Twin</a>
+      <a href="#materials" class="nav-link px-3 py-2">Materials</a>
+      <a href="#roadmap" class="nav-link px-3 py-2">Roadmap</a>
+      <a href="#developers" class="nav-link px-3 py-2">Developers</a>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-3">
+      <button class="btn-ghost hidden md:inline-flex items-center gap-2 text-xs">
+        <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+        Docs
+      </button>
+      <button onclick="openDemo()" class="btn-primary text-xs !py-2 !px-4 !rounded-lg hidden md:flex items-center gap-2">
+        <i data-lucide="play" class="w-3.5 h-3.5"></i>
+        Launch Demo
+      </button>
+      <!-- Mobile Toggle -->
+      <button class="mobile-toggle items-center justify-center w-9 h-9 rounded-lg bg-white/5 border border-white/10" onclick="toggleMobileMenu()">
+        <i data-lucide="menu" class="w-4 h-4 text-white" id="menuIcon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu">
+  <button onclick="toggleMobileMenu()" class="absolute top-5 right-6 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center">
+    <i data-lucide="x" class="w-4 h-4 text-white"></i>
+  </button>
+  <div class="flex flex-col gap-2 mt-4">
+    <a href="#about" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">About BuildOS</a>
+    <a href="#features" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Features</a>
+    <a href="#ai-modules" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">AI Modules</a>
+    <a href="#robotics" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Robotics</a>
+    <a href="#smart-cities" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Smart Cities</a>
+    <a href="#digital-twin" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Digital Twin</a>
+    <a href="#materials" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Materials</a>
+    <a href="#roadmap" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Roadmap</a>
+    <a href="#developers" onclick="toggleMobileMenu()" class="text-lg text-neutral-300 hover:text-white py-3 border-b border-white/5 transition-colors">Developers</a>
+    <button onclick="openDemo();toggleMobileMenu()" class="btn-primary mt-6 w-full text-center">Launch Demo</button>
+  </div>
+</div>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+  <!-- Hero Background Effects -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/8 blur-[120px]"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-purple-500/6 blur-[100px]"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-white/[0.02] animate-rotate-slow"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white/[0.03]" style="animation: rotate-slow 30s linear infinite reverse;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-blue-500/10" style="animation: rotate-slow 15s linear infinite;"></div>
+  </div>
+
+  <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+    <!-- Top Badge -->
+    <div class="animate-fade-in-down opacity-0" style="animation-fill-mode:forwards">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-white/10 mb-8">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs text-neutral-300 font-medium tracking-wide">PEXI OS v3.0 — Now Live</span>
+      </div>
+    </div>
+
+    <!-- Main Headline -->
+    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95] mb-6 animate-fade-in-up opacity-0 delay-100" style="animation-fill-mode:forwards">
+      <span class="block text-white">The Operating</span>
+      <span class="block text-gradient-blue">System for</span>
+      <span class="block text-white">Civilization</span>
+    </h1>
+
+    <!-- Subheadline -->
+    <p class="text-lg md:text-xl text-neutral-400 font-light max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up opacity-0 delay-300" style="animation-fill-mode:forwards">
+      PEXI OS powers autonomous construction, smart cities, robotics coordination, and AI-driven infrastructure planning — in real time.
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-in-up opacity-0 delay-400" style="animation-fill-mode:forwards">
+      <button onclick="openDemo()" class="btn-primary flex items-center gap-2 !py-3.5 !px-8 !rounded-xl !text-base">
+        <i data-lucide="rocket" class="w-4 h-4"></i>
+        Explore System
+      </button>
+      <button onclick="scrollToSection('ai-modules')" class="btn-secondary flex items-center gap-2 !py-3.5 !px-8 !rounded-xl !text-base">
+        <i data-lucide="brain" class="w-4 h-4"></i>
+        View AI Engine
+      </button>
+      <button onclick="scrollToSection('smart-cities')" class="btn-secondary flex items-center gap-2 !py-3.5 !px-8 !rounded-xl !text-base">
+        <i data-lucide="globe" class="w-4 h-4"></i>
+        Smart Cities
+      </button>
+    </div>
+
+    <!-- Animated Metrics -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto animate-fade-in-up opacity-0 delay-600" style="animation-fill-mode:forwards">
+      <div class="glass rounded-xl p-4 text-center card-hover card-hover-blue">
+        <div class="text-2xl md:text-3xl font-bold text-white stat-number" data-target="12500">0</div>
+        <div class="text-xs text-neutral-500 mt-1 font-medium">Simulated Projects</div>
+      </div>
+      <div class="glass rounded-xl p-4 text-center card-hover card-hover-purple">
+        <div class="text-2xl md:text-3xl font-bold text-white stat-number" data-target="98.7" data-suffix="%" data-decimal="1">0</div>
+        <div class="text-xs text-neutral-500 mt-1 font-medium">AI Accuracy</div>
+      </div>
+      <div class="glass rounded-xl p-4 text-center card-hover card-hover-cyan">
+        <div class="text-2xl md:text-3xl font-bold text-white">1</div>
+        <div class="text-xs text-neutral-500 mt-1 font-medium">Unified OS</div>
+      </div>
+      <div class="glass rounded-xl p-4 text-center card-hover card-hover-emerald">
+        <div class="text-2xl md:text-3xl font-bold text-gradient-emerald">∞</div>
+        <div class="text-xs text-neutral-500 mt-1 font-medium">Scalability</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in opacity-0 delay-800" style="animation-fill-mode:forwards">
+    <span class="text-[10px] text-neutral-600 uppercase tracking-widest">Scroll</span>
+    <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1">
+      <div class="w-1 h-2 rounded-full bg-blue-400 animate-bounce"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT SECTION ===================== -->
+<section id="about" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <!-- Left Content -->
+      <div class="reveal">
+        <div class="tag bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-6">
+          <i data-lucide="info" class="w-3 h-3"></i>
+          About PEXI OS
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-6">
+          What is <span class="text-gradient-blue">BuildOS</span>?
+        </h2>
+        <p class="text-neutral-400 font-light leading-relaxed text-lg mb-8">
+          PEXI OS is a unified operating system designed to manage, simulate, and automate construction and infrastructure at every scale — from individual buildings to entire smart cities.
+        </p>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <div class="icon-box bg-blue-500/10 mt-0.5">
+              <i data-lucide="brain" class="w-5 h-5 text-blue-400"></i>
+            </div>
+            <div>
+              <h4 class="text-white font-medium mb-1">Artificial Intelligence</h4>
+              <p class="text-neutral-500 text-sm font-light">Deep learning models that plan, predict, and optimize every construction phase.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="icon-box bg-purple-500/10 mt-0.5">
+              <i data-lucide="bot" class="w-5 h-5 text-purple-400"></i>
+            </div>
+            <div>
+              <h4 class="text-white font-medium mb-1">Robotics Control Systems</h4>
+              <p class="text-neutral-500 text-sm font-light">Coordinates autonomous machines, drones, and robotic builders in real time.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="icon-box bg-cyan-500/10 mt-0.5">
+              <i data-lucide="scan" class="w-5 h-5 text-cyan-400"></i>
+            </div>
+            <div>
+              <h4 class="text-white font-medium mb-1">Digital Twin Simulation</h4>
+              <p class="text-neutral-500 text-sm font-light">Real-time virtual replicas of physical infrastructure for instant analysis.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="icon-box bg-emerald-500/10 mt-0.5">
+              <i data-lucide="zap" class="w-5 h-5 text-emerald-400"></i>
+            </div>
+            <div>
+              <h4 class="text-white font-medium mb-1">Infrastructure Economics</h4>
+              <p class="text-neutral-500 text-sm font-light">Real-time sensor networks with infrastructure economics modeling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual -->
+      <div class="reveal delay-200">
+        <div class="relative">
+          <div class="absolute -inset-4 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 rounded-3xl blur-xl"></div>
+          <div class="relative glass-strong rounded-2xl p-8 border border-white/10 overflow-hidden">
+            <!-- Terminal/Code Preview -->
+            <div class="flex items-center gap-2 mb-6">
+              <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/60"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+              <span class="text-xs text-neutral-600 ml-2 font-mono">pexi-os terminal</span>
+            </div>
+            <div class="font-mono text-xs space-y-3 text-neutral-400">
+              <div><span class="text-emerald-400">$</span> pexi init --project "smart-home-v2"</div>
+              <div class="text-blue-400">→ Initializing PEXI OS v3.0...</div>
+              <div class="text-blue-400">→ Loading BuildPath AI module...</div>
+              <div class="text-blue-400">→ Connecting Digital Twin layer...</div>
+              <div class="text-neutral-600">────────────────────────────────</div>
+              <div><span class="text-emerald-400">$</span> pexi build --type residential --budget 12M</div>
+              <div class="text-purple-400">→ Generating construction roadmap...</div>
+              <div class="text-purple-400">→ Day 1-30: Foundation phase planned</div>
+              <div class="text-purple-400">→ Material schedule: 50 bags cement (Day 1)</div>
+              <div class="text-neutral-600">────────────────────────────────</div>
+              <div><span class="text-emerald-400">$</span> pexi simulate --full</div>
+              <div class="text-cyan-400">→ Running 10,000 simulation cycles...</div>
+              <div class="text-cyan-400">→ Risk score: LOW (0.03 probability)</div>
+              <div class="text-cyan-400">→ Completion estimate: 92% on schedule</div>
+              <div class="text-emerald-400 font-medium">✓ All systems operational. Build ready.</div>
+            </div>
+            <div class="mt-6 h-1 rounded-full bg-white/5 overflow-hidden">
+              <div class="h-full w-3/4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-shimmer"></div>
+            </div>
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-[10px] text-neutral-600">System Load</span>
+              <span class="text-[10px] text-neutral-500">76% — Nominal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CORE FEATURES ===================== -->
+<section id="features" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-6 inline-flex">
+        <i data-lucide="layers" class="w-3 h-3"></i>
+        Core System Modules
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        Six Pillars of <span class="text-gradient-blue">Intelligence</span>
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto">
+        Every module works in harmony, creating a unified construction intelligence that learns, adapts, and builds autonomously.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Module 1 -->
+      <div class="reveal glass rounded-2xl p-8 card-hover card-hover-blue group border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors"></div>
+        <div class="relative">
+          <div class="icon-box bg-blue-500/10 mb-5 group-hover:bg-blue-500/20 transition-colors">
+            <i data-lucide="bot" class="w-5 h-5 text-blue-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-white mb-3">Autonomous Construction Engine</h3>
+          <p class="text-neutral-500 text-sm font-light leading-relaxed mb-5">Coordinates robots, drones, and automated machinery across construction sites with zero human intervention.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-1 rounded-md bg-blue-500/10 text-blue-400">Robots</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-blue-500/10 text-blue-400">Drones</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-blue-500/10 text-blue-400">Cranes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 2 -->
+      <div class="reveal delay-100 glass rounded-2xl p-8 card-hover card-hover-purple group border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-colors"></div>
+        <div class="relative">
+          <div class="icon-box bg-purple-500/10 mb-5 group-hover:bg-purple-500/20 transition-colors">
+            <i data-lucide="brain" class="w-5 h-5 text-purple-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-white mb-3">AI Planning Intelligence</h3>
+          <p class="text-neutral-500 text-sm font-light leading-relaxed mb-5">Generates optimized designs, schedules, and risk forecasts using deep learning and simulation engines.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-1 rounded-md bg-purple-500/10 text-purple-400">Design</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-purple-500/10 text-purple-400">Schedule</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-purple-500/10 text-purple-400">Risk</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 3 -->
+      <div class="reveal delay-200 glass rounded-2xl p-8 card-hover card-hover-cyan group border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl group-hover:bg-cyan-500/10 transition-colors"></div>
+        <div class="relative">
+          <div class="icon-box bg-cyan-500/10 mb-5 group-hover:bg-cyan-500/20 transition-colors">
+            <i data-lucide="copy" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-white mb-3">Digital Twin Simulation</h3>
+          <p class="text-neutral-500 text-sm font-light leading-relaxed mb-5">Creates real-time virtual replicas of physical infrastructure for predictive analysis and optimization.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-1 rounded-md bg-cyan-500/10 text-cyan-400">Virtual</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-cyan-500/10 text-cyan-400">Real-time</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-cyan-500/10 text-cyan-400">Predict</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 4 -->
+      <div class="reveal delay-300 glass rounded-2xl p-8 card-hover card-hover-emerald group border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors"></div>
+        <div class="relative">
+          <div class="icon-box bg-emerald-500/10 mb-5 group-hover:bg-emerald-500/20 transition-colors">
+            <i data-lucide="flask-conical" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-white mb-3">Materials Intelligence</h3>
+          <p class="text-neutral-500 text-sm font-light leading-relaxed mb-5">Recommends advanced, sustainable, and high-performance materials based on AI-driven analysis.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400">Smart</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400">Eco</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400">Nano</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 5 -->
+      <div class="reveal delay-400 glass rounded-2xl p-8 card-hover card-hover-pink group border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-pink-500/5 rounded-full blur-3xl group-hover:bg-pink-500/10 transition-colors"></div>
+        <div class="relative">
+          <div class="icon-box bg-pink-500/10 mb-5 group-hover:bg-pink-500/20 transition-colors">
+            <i data-lucide="building-2" class="w-5 h-5 text-pink-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-white mb-3">Smart City OS Layer</h3>
+          <p class="text-neutral-500 text-sm font-light leading-relaxed mb-5">Designs and manages entire urban ecosystems dynamically — from traffic to energy to waste.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-1 rounded-md bg-pink-500/10 text-pink-400">Urban</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-pink-500/10 text-pink-400">Traffic</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-pink-500/10 text-pink-400">Energy</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 6 -->
+      <div class="reveal delay-500 glass rounded-2xl p-8 card-hover card-hover-blue group border border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl group-hover:bg-orange-500/10 transition-colors"></div>
+        <div class="relative">
+          <div class="icon-box bg-orange-500/10 mb-5 group-hover:bg-orange-500/20 transition-colors">
+            <i data-lucide="shield-check" class="w-5 h-5 text-orange-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-white mb-3">Governance & Compliance</h3>
+          <p class="text-neutral-500 text-sm font-light leading-relaxed mb-5">Automates legal checks, permits, safety compliance, and regulatory frameworks across jurisdictions.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] px-2 py-1 rounded-md bg-orange-500/10 text-orange-400">Legal</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-orange-500/10 text-orange-400">Permits</span>
+            <span class="text-[10px] px-2 py-1 rounded-md bg-orange-500/10 text-orange-400">Safety</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AI MODULES ===================== -->
+<section id="ai-modules" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-6 inline-flex">
+        <i data-lucide="cpu" class="w-3 h-3"></i>
+        Roldley AI Modules
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        The <span class="text-gradient-cyan">Intelligence</span> Core
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto">
+        Ten specialized AI engines working together as a unified construction brain — from planning to inspection to mega-infrastructure.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <!-- Roldley Vision AI -->
+      <div class="reveal glass rounded-2xl p-6 card-hover card-hover-blue border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="eye" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Vision AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Analyzes construction photos in real-time. Detects defects, measures progress, and verifies structural quality automatically.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Architect AI -->
+      <div class="reveal delay-100 glass rounded-2xl p-6 card-hover card-hover-purple border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="pencil-ruler" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Architect AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Generates advanced architectural designs, floor plans, and 3D models from natural language descriptions.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Engineer AI -->
+      <div class="reveal delay-200 glass rounded-2xl p-6 card-hover card-hover-cyan border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="wrench" class="w-5 h-5 text-cyan-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Engineer AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Reviews structural concepts, calculates load-bearing requirements, and validates engineering decisions.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Sustainability AI -->
+      <div class="reveal delay-300 glass rounded-2xl p-6 card-hover card-hover-emerald border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="leaf" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Sustainability AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Optimizes eco-performance, calculates carbon footprint, and recommends green building strategies.</p>
+        </div>
+      </div>
+
+      <!-- Roldley BuildPath AI -->
+      <div class="reveal delay-400 glass rounded-2xl p-6 card-hover card-hover-blue border border-white/5 flex items-start gap-5 group relative overflow-hidden">
+        <div class="absolute -top-1 -right-1 px-2 py-0.5 bg-blue-500 text-white text-[9px] font-bold rounded-bl-lg uppercase">Flagship</div>
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="route" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley BuildPath AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Creates daily construction roadmaps, assigns tasks, manages schedules, and guides projects from foundation to completion.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Forecast AI -->
+      <div class="reveal delay-500 glass rounded-2xl p-6 card-hover card-hover-pink border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-pink-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="trending-up" class="w-5 h-5 text-pink-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Forecast AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Predicts project outcomes, simulates scenarios, and provides probability-weighted forecasts for decision making.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Inspector AI -->
+      <div class="reveal glass rounded-2xl p-6 card-hover card-hover-emerald border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="clipboard-check" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Inspector AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Checks quality compliance, identifies code violations, and generates inspection reports automatically.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Procurement AI -->
+      <div class="reveal delay-100 glass rounded-2xl p-6 card-hover card-hover-purple border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="shopping-cart" class="w-5 h-5 text-orange-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Procurement AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Automates purchasing plans, compares supplier prices, and detects counterfeit materials in the supply chain.</p>
+        </div>
+      </div>
+
+      <!-- Roldley Estate AI -->
+      <div class="reveal delay-200 glass rounded-2xl p-6 card-hover card-hover-cyan border border-white/5 flex items-start gap-5 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-sky-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="home" class="w-5 h-5 text-cyan-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley Estate AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Plans entire residential communities with optimized layouts, amenities, and infrastructure placement.</p>
+        </div>
+      </div>
+
+      <!-- Roldley MegaBuild AI -->
+      <div class="reveal delay-300 glass rounded-2xl p-6 card-hover card-hover-pink border border-white/5 flex items-start gap-5 group relative overflow-hidden">
+        <div class="absolute -top-1 -right-1 px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[9px] font-bold rounded-bl-lg uppercase">Advanced</div>
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-rose-600/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+          <i data-lucide="building" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-white mb-1">Roldley MegaBuild AI</h3>
+          <p class="text-neutral-500 text-sm font-light">Coordinates large-scale city and infrastructure projects — highways, airports, railways, and smart cities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BUILDPATH AI DEMO ===================== -->
+<section id="buildpath" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="reveal relative">
+      <div class="absolute -inset-8 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 rounded-3xl blur-2xl"></div>
+      <div class="relative glass-strong rounded-3xl p-8 md:p-12 border border-white/10 overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500"></div>
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="tag bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-6">
+              <i data-lucide="sparkles" class="w-3 h-3"></i>
+              Most Powerful Feature
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+              Roldley <span class="text-gradient-blue">BuildPath AI</span>
+            </h2>
+            <p class="text-neutral-400 font-light leading-relaxed mb-6">
+              A user simply describes their project, and BuildPath generates a complete construction roadmap — from day one to completion.
+            </p>
+
+            <!-- Input Demo -->
+            <div class="glass rounded-xl p-4 border border-white/10 mb-4">
+              <div class="text-[10px] text-neutral-600 uppercase tracking-wider mb-2">User Input</div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="user" class="w-4 h-4 text-blue-400"></i>
+                </div>
+                <p class="text-sm text-neutral-300 italic">"I am building a 4-bedroom sustainable home with a KES 12 million budget."</p>
+              </div>
+            </div>
+
+            <!-- Output Tags -->
+            <div class="text-[10px] text-neutral-600 uppercase tracking-wider mb-3">AI Generates</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag bg-blue-500/10 text-blue-400 border border-blue-500/20">Day 1–30 Tasks</span>
+              <span class="tag bg-purple-500/10 text-purple-400 border border-purple-500/20">Weekly Milestones</span>
+              <span class="tag bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Material Schedule</span>
+              <span class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Budget Allocation</span>
+              <span class="tag bg-pink-500/10 text-pink-400 border border-pink-500/20">Risk Alerts</span>
+              <span class="tag bg-orange-500/10 text-orange-400 border border-orange-500/20">Contractor Picks</span>
+              <span class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Eco Actions</span>
+              <span class="tag bg-blue-500/10 text-blue-400 border border-blue-500/20">Progress Reports</span>
+            </div>
+          </div>
+
+          <!-- Daily Briefing Card -->
+          <div>
+            <div class="glass rounded-2xl p-6 border border-white/10 relative">
+              <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <i data-lucide="sunrise" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-white">Morning Briefing</div>
+                  <div class="text-[10px] text-neutral-500">Day 14 of 180 — Foundation Phase</div>
+                </div>
+                <div class="ml-auto notif-dot"></div>
+              </div>
+
+              <div class="space-y-4 font-mono text-xs">
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10">
+                  <i data-lucide="hard-hat" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0"></i>
+                  <span class="text-neutral-300">Complete foundation reinforcement</span>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
+                  <i data-lucide="shopping-bag" class="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0"></i>
+                  <span class="text-neutral-300">Purchase 50 bags of cement</span>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-purple-500/5 border border-purple-500/10">
+                  <i data-lucide="search" class="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0"></i>
+                  <span class="text-neutral-300">Inspect drainage trenches</span>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/10">
+                  <i data-lucide="bar-chart-3" class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                  <span class="text-neutral-300">Expected completion: <span class="text-emerald-400 font-medium">92% on schedule</span></span>
+                </div>
+              </div>
+
+              <div class="mt-5 pt-4 border-t border-white/5">
+                <div class="flex justify-between text-[10px] text-neutral-600 mb-2">
+                  <span>Overall Progress</span>
+                  <span class="text-blue-400">14.2%</span>
+                </div>
+                <div class="h-2 rounded-full bg-white/5 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500" style="width:14.2%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROBOTICS & AUTOMATION ===================== -->
+<section id="robotics" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-6 inline-flex">
+        <i data-lucide="cog" class="w-3 h-3"></i>
+        Robotics & Automation
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        <span class="text-gradient-emerald">Autonomous</span> Construction
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto">
+        From bricklaying robots to autonomous cranes — PEXI OS coordinates the entire robotic workforce.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div class="reveal glass rounded-xl p-5 text-center card-hover card-hover-blue border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-500/20 transition-colors">
+          <i data-lucide="box" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Bricklaying</div>
+        <div class="text-[10px] text-neutral-600">Robot Coordinator</div>
+      </div>
+
+      <div class="reveal delay-100 glass rounded-xl p-5 text-center card-hover card-hover-purple border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-500/20 transition-colors">
+          <i data-lucide="droplets" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Cement Pour</div>
+        <div class="text-[10px] text-neutral-600">AI-Controlled</div>
+      </div>
+
+      <div class="reveal delay-200 glass rounded-xl p-5 text-center card-hover card-hover-cyan border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-cyan-500/20 transition-colors">
+          <i data-lucide="truck" class="w-5 h-5 text-cyan-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Self-Driving</div>
+        <div class="text-[10px] text-neutral-600">Vehicle Scheduler</div>
+      </div>
+
+      <div class="reveal delay-300 glass rounded-xl p-5 text-center card-hover card-hover-emerald border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-500/20 transition-colors">
+          <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Robotic Weld</div>
+        <div class="text-[10px] text-neutral-600">Steel Planner</div>
+      </div>
+
+      <div class="reveal delay-400 glass rounded-xl p-5 text-center card-hover card-hover-pink border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-pink-500/20 transition-colors">
+          <i data-lucide="mountain" class="w-5 h-5 text-pink-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Excavation</div>
+        <div class="text-[10px] text-neutral-600">Path Optimizer</div>
+      </div>
+
+      <div class="reveal glass rounded-xl p-5 text-center card-hover card-hover-blue border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-500/20 transition-colors">
+          <i data-lucide="arrow-up-from-line" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Crane AI</div>
+        <div class="text-[10px] text-neutral-600">Operation Assist</div>
+      </div>
+
+      <div class="reveal delay-100 glass rounded-xl p-5 text-center card-hover card-hover-purple border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-500/20 transition-colors">
+          <i data-lucide="plane" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Drone Build</div>
+        <div class="text-[10px] text-neutral-600">Aerial Assembly</div>
+      </div>
+
+      <div class="reveal delay-200 glass rounded-xl p-5 text-center card-hover card-hover-cyan border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-cyan-500/20 transition-colors">
+          <i data-lucide="paintbrush" class="w-5 h-5 text-cyan-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Robotic Paint</div>
+        <div class="text-[10px] text-neutral-600">System Planner</div>
+      </div>
+
+      <div class="reveal delay-300 glass rounded-xl p-5 text-center card-hover card-hover-emerald border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-500/20 transition-colors">
+          <i data-lucide="triangle" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Roofing</div>
+        <div class="text-[10px] text-neutral-600">Auto Install</div>
+      </div>
+
+      <div class="reveal delay-400 glass rounded-xl p-5 text-center card-hover card-hover-pink border border-white/5 group">
+        <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-red-500/20 transition-colors">
+          <i data-lucide="shield-alert" class="w-5 h-5 text-red-400"></i>
+        </div>
+        <div class="text-xs font-medium text-white mb-1">Demolition</div>
+        <div class="text-[10px] text-neutral-600">Safety AI</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SMART CITIES ===================== -->
+<section id="smart-cities" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <!-- Visual -->
+      <div class="reveal order-2 md:order-1">
+        <div class="relative">
+          <div class="absolute -inset-4 bg-gradient-to-br from-pink-500/5 via-purple-500/5 to-cyan-500/5 rounded-3xl blur-2xl"></div>
+          <div class="relative glass-strong rounded-2xl p-6 border border-white/10">
+            <!-- Smart City Grid Visual -->
+            <div class="grid grid-cols-3 gap-3 mb-4">
+              <div class="aspect-square rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center animate-pulse">
+                <i data-lucide="building-2" class="w-5 h-5 text-blue-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 0.3s">
+                <i data-lucide="zap" class="w-5 h-5 text-purple-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 0.6s">
+                <i data-lucide="droplets" class="w-5 h-5 text-cyan-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 0.9s">
+                <i data-lucide="trees" class="w-5 h-5 text-emerald-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/20 flex items-center justify-center glow-blue">
+                <i data-lucide="globe" class="w-6 h-6 text-white"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 1.2s">
+                <i data-lucide="bus" class="w-5 h-5 text-pink-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 1.5s">
+                <i data-lucide="shield" class="w-5 h-5 text-orange-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 1.8s">
+                <i data-lucide="wifi" class="w-5 h-5 text-yellow-400"></i>
+              </div>
+              <div class="aspect-square rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center" style="animation: pulse-glow 2s infinite 2.1s">
+                <i data-lucide="heart-pulse" class="w-5 h-5 text-red-400"></i>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-xs text-neutral-400 font-medium">Smart City OS — Active Nodes</div>
+              <div class="text-[10px] text-neutral-600 mt-1">9 subsystems connected • 2.4M citizens modeled</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="reveal order-1 md:order-2">
+        <div class="tag bg-pink-500/10 text-pink-400 border border-pink-500/20 mb-6">
+          <i data-lucide="globe" class="w-3 h-3"></i>
+          Smart Cities
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-6">
+          City-Scale <span class="text-gradient-pink">Intelligence</span>
+        </h2>
+        <p class="text-neutral-400 font-light leading-relaxed text-lg mb-8">
+          PEXI OS doesn't just build buildings — it plans and manages entire urban ecosystems with dynamic optimization.
+        </p>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">AI smart city blueprint generator</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">Population growth impact simulator</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">Smart housing distribution planner</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">Urban heat reduction optimizer</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">AI public transport integration</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">Emergency evacuation route optimizer</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-neutral-300">Digital twin of entire cities</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DIGITAL TWIN ===================== -->
+<section id="digital-twin" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-6 inline-flex">
+        <i data-lucide="scan" class="w-3 h-3"></i>
+        Digital Twin Systems
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        Mirror <span class="text-gradient-cyan">Reality</span>
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto">
+        Real-time virtual replicas of physical infrastructure — every beam, every wire, every sensor synced in perfect digital reflection.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="reveal glass rounded-2xl p-8 card-hover card-hover-cyan border border-white/5 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center mx-auto mb-5">
+          <i data-lucide="radio" class="w-7 h-7 text-cyan-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-white mb-3">IoT Sensor Fusion</h3>
+        <p class="text-neutral-500 text-sm font-light">Full-site sensor integration: vibration, moisture, temperature, and structural health monitoring in real time.</p>
+      </div>
+
+      <div class="reveal delay-100 glass rounded-2xl p-8 card-hover card-hover-blue border border-white/5 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-5">
+          <i data-lucide="activity" class="w-7 h-7 text-blue-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-white mb-3">Anomaly Detection</h3>
+        <p class="text-neutral-500 text-sm font-light">Live construction anomaly detection powered by AI that identifies structural issues before they become critical.</p>
+      </div>
+
+      <div class="reveal delay-200 glass rounded-2xl p-8 card-hover card-hover-purple border border-white/5 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center mx-auto mb-5">
+          <i data-lucide="refresh-cw" class="w-7 h-7 text-purple-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-white mb-3">Real-Time Sync</h3>
+        <p class="text-neutral-500 text-sm font-light">Continuous synchronization between physical site and digital twin, with predictive maintenance alerts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MATERIALS INTELLIGENCE ===================== -->
+<section id="materials" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div class="reveal">
+        <div class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-6">
+          <i data-lucide="flask-conical" class="w-3 h-3"></i>
+          Materials Intelligence
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-6">
+          Smarter <span class="text-gradient-emerald">Materials</span>
+        </h2>
+        <p class="text-neutral-400 font-light leading-relaxed text-lg mb-8">
+          AI-driven materials science that recommends, simulates, and discovers the best materials for every project — with sustainability at the core.
+        </p>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="glass rounded-lg p-3 border border-white/5 text-center">
+            <div class="text-lg font-bold text-emerald-400">∞</div>
+            <div class="text-[10px] text-neutral-600">Composites</div>
+          </div>
+          <div class="glass rounded-lg p-3 border border-white/5 text-center">
+            <div class="text-lg font-bold text-cyan-400">AI</div>
+            <div class="text-[10px] text-neutral-600">Nano-Planning</div>
+          </div>
+          <div class="glass rounded-lg p-3 border border-white/5 text-center">
+            <div class="text-lg font-bold text-purple-400">CO₂⁻</div>
+            <div class="text-[10px] text-neutral-600">Carbon-Negative</div>
+          </div>
+          <div class="glass rounded-lg p-3 border border-white/5 text-center">
+            <div class="text-lg font-bold text-blue-400">Self-</div>
+            <div class="text-[10px] text-neutral-600">Healing Concrete</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal delay-200 space-y-4">
+        <div class="glass rounded-xl p-5 border border-white/5 card-hover card-hover-emerald flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="microscope" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-white mb-1">AI Material Innovation Lab</h4>
+            <p class="text-xs text-neutral-500">Discovers and simulates new composite materials with superior properties.</p>
+          </div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-white/5 card-hover card-hover-cyan flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="thermometer" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-white mb-1">Weather-Responsive Selection</h4>
+            <p class="text-xs text-neutral-500">Automatically selects materials optimized for local climate conditions.</p>
+          </div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-white/5 card-hover card-hover-purple flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="recycle" class="w-5 h-5 text-purple-400"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-white mb-1">Sustainable Substitutes</h4>
+            <p class="text-xs text-neutral-500">Finds eco-friendly alternatives without compromising structural integrity.</p>
+          </div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-white/5 card-hover card-hover-blue flex items-start gap-4">
+          <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="shield-check" class="w-5 h-5 text-blue-400"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-medium text-white mb-1">Counterfeit Material Detector</h4>
+            <p class="text-xs text-neutral-500">AI-powered verification that prevents substandard materials from entering your project.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY THIS MATTERS ===================== -->
+<section id="why" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        Why PEXI OS <span class="text-gradient-blue">Matters</span>
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto">
+        Traditional construction is broken. PEXI OS fixes it.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <!-- Before -->
+      <div class="reveal glass rounded-2xl p-8 border border-red-500/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500/30 to-orange-500/30"></div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+            <i data-lucide="x" class="w-4 h-4 text-red-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-red-400">Traditional Construction</h3>
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="clock" class="w-4 h-4 text-red-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-400">Slow and unpredictable timelines</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="trending-down" class="w-4 h-4 text-red-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-400">Expensive cost overruns</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="unlink" class="w-4 h-4 text-red-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-400">Fragmented communication</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-400">Human-error dependent</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- After -->
+      <div class="reveal delay-200 glass rounded-2xl p-8 border border-emerald-500/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500/30 to-cyan-500/30"></div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+            <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+          </div>
+          <h3 class="text-lg font-medium text-emerald-400">PEXI OS Powered</h3>
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="zap" class="w-4 h-4 text-emerald-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-300">Fully coordinated AI systems</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="target" class="w-4 h-4 text-emerald-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-300">Predictive construction planning</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="bot" class="w-4 h-4 text-emerald-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-300">Autonomous execution layers</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <i data-lucide="globe" class="w-4 h-4 text-emerald-400/60 flex-shrink-0"></i>
+            <span class="text-neutral-300">Real-time global optimization</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== USE CASES ===================== -->
+<section id="use-cases" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-orange-500/10 text-orange-400 border border-orange-500/20 mb-6 inline-flex">
+        <i data-lucide="layout-grid" class="w-3 h-3"></i>
+        Use Cases
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        Built for <span class="text-gradient-blue">Everything</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="reveal glass rounded-xl p-5 text-center card-hover border border-white/5 group">
+        <i data-lucide="building-2" class="w-6 h-6 text-blue-400 mx-auto mb-3 group-hover:scale-110 transition-transform"></i>
+        <div class="text-xs font-medium text-white">Smart Cities</div>
+      </div>
+      <div class="reveal delay-100 glass rounded-xl p-5 text-center card-hover border border-white/5 group">
+        <i data-lucide="road" class="w-6 h-6 text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform"></i>
+        <div class="text-xs font-medium text-white">Mega Infra</div>
+      </div>
+      <div class="reveal delay-200 glass rounded-xl p-5 text-center card-hover border border-white/5 group">
+        <i data-lucide="home" class="w-6 h-6 text-cyan-400 mx-auto mb-3 group-hover:scale-110 transition-transform"></i>
+        <div class="text-xs font-medium text-white">Housing</div>
+      </div>
+      <div class="reveal delay-300 glass rounded-xl p-5 text-center card-hover border border-white/5 group">
+        <i data-lucide="cloud-rain" class="w-6 h-6 text-emerald-400 mx-auto mb-3 group-hover:scale-110 transition-transform"></i>
+        <div class="text-xs font-medium text-white">Climate-Resilient</div>
+      </div>
+      <div class="reveal delay-400 glass rounded-xl p-5 text-center card-hover border border-white/5 group">
+        <i data-lucide="siren" class="w-6 h-6 text-red-400 mx-auto mb-3 group-hover:scale-110 transition-transform"></i>
+        <div class="text-xs font-medium text-white">Disaster Recovery</div>
+      </div>
+      <div class="reveal delay-500 glass rounded-xl p-5 text-center card-hover border border-white/5 group">
+        <i data-lucide="battery-charging" class="w-6 h-6 text-yellow-400 mx-auto mb-3 group-hover:scale-110 transition-transform"></i>
+        <div class="text-xs font-medium text-white">Off-Grid</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROADMAP ===================== -->
+<section id="roadmap" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-6 inline-flex">
+        <i data-lucide="map" class="w-3 h-3"></i>
+        Roadmap
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        The Path <span class="text-gradient-blue">Forward</span>
+      </h2>
+    </div>
+
+    <div class="max-w-2xl mx-auto space-y-0">
+      <!-- Phase 1 -->
+      <div class="reveal flex items-start gap-6 pb-10 relative">
+        <div class="flex flex-col items-center">
+          <div class="roadmap-dot border-blue-400 bg-blue-400"></div>
+          <div class="timeline-connector flex-1 mt-1"></div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-blue-500/10 flex-1 card-hover card-hover-blue">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="tag bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px]">Phase 1</span>
+            <span class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px]">Complete</span>
+          </div>
+          <h4 class="text-sm font-medium text-white mb-1">AI Construction Planning System</h4>
+          <p class="text-xs text-neutral-500">BuildPath AI, Budget Guardian, Smart Timeline, and core planning modules.</p>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="reveal delay-100 flex items-start gap-6 pb-10 relative">
+        <div class="flex flex-col items-center">
+          <div class="roadmap-dot border-purple-400 bg-purple-400"></div>
+          <div class="timeline-connector flex-1 mt-1"></div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-purple-500/10 flex-1 card-hover card-hover-purple">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="tag bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[9px]">Phase 2</span>
+            <span class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px]">Complete</span>
+          </div>
+          <h4 class="text-sm font-medium text-white mb-1">Digital Twin Integration</h4>
+          <p class="text-xs text-neutral-500">Real-time virtual replicas, IoT sensor fusion, and anomaly detection systems.</p>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="reveal delay-200 flex items-start gap-6 pb-10 relative">
+        <div class="flex flex-col items-center">
+          <div class="roadmap-dot border-cyan-400 bg-cyan-400" style="box-shadow:0 0 10px rgba(6,182,212,0.5)"></div>
+          <div class="timeline-connector flex-1 mt-1"></div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-cyan-500/10 flex-1 card-hover card-hover-cyan">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="tag bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[9px]">Phase 3</span>
+            <span class="tag bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 text-[9px]">In Progress</span>
+          </div>
+          <h4 class="text-sm font-medium text-white mb-1">Semi-Autonomous Site Control</h4>
+          <p class="text-xs text-neutral-500">Robot coordination, drone monitoring, and AI-assisted construction execution.</p>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="reveal delay-300 flex items-start gap-6 pb-10 relative">
+        <div class="flex flex-col items-center">
+          <div class="roadmap-dot border-emerald-400"></div>
+          <div class="timeline-connector flex-1 mt-1"></div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-white/5 flex-1 card-hover card-hover-emerald opacity-60">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="tag bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px]">Phase 4</span>
+            <span class="tag bg-white/5 text-neutral-500 border border-white/5 text-[9px]">Upcoming</span>
+          </div>
+          <h4 class="text-sm font-medium text-white mb-1">Full Robotic Construction Systems</h4>
+          <p class="text-xs text-neutral-500">Complete autonomous construction from foundation to finishing with robotic crews.</p>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="reveal delay-400 flex items-start gap-6 relative">
+        <div class="flex flex-col items-center">
+          <div class="roadmap-dot border-pink-400"></div>
+        </div>
+        <div class="glass rounded-xl p-5 border border-white/5 flex-1 card-hover card-hover-pink opacity-40">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="tag bg-pink-500/10 text-pink-400 border border-pink-500/20 text-[9px]">Phase 5</span>
+            <span class="tag bg-white/5 text-neutral-500 border border-white/5 text-[9px]">Vision</span>
+          </div>
+          <h4 class="text-sm font-medium text-white mb-1">Smart City OS — Global Deployment</h4>
+          <p class="text-xs text-neutral-500">Planet-scale urban development optimization and civilization infrastructure intelligence.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DEVELOPERS ===================== -->
+<section id="developers" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-20 reveal">
+      <div class="tag bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-6 inline-flex">
+        <i data-lucide="code" class="w-3 h-3"></i>
+        Build With PEXI OS
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+        Developer <span class="text-gradient-blue">Ecosystem</span>
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto">
+        Integrate, extend, and build on top of PEXI OS with powerful APIs and SDKs.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="reveal glass rounded-2xl p-8 card-hover card-hover-blue border border-white/5">
+        <div class="icon-box bg-blue-500/10 mb-5">
+          <i data-lucide="plug" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-white mb-2">API Access</h3>
+        <p class="text-neutral-500 text-sm font-light mb-4">Full REST & GraphQL API for the simulation engine, AI modules, and project management.</p>
+        <div class="font-mono text-xs text-neutral-600 bg-white/3 rounded-lg p-3">
+          <span class="text-blue-400">GET</span> /api/v3/simulate<br>
+          <span class="text-emerald-400">POST</span> /api/v3/buildpath<br>
+          <span class="text-purple-400">WS</span> /api/v3/twin/stream
+        </div>
+      </div>
+
+      <div class="reveal delay-100 glass rounded-2xl p-8 card-hover card-hover-purple border border-white/5">
+        <div class="icon-box bg-purple-500/10 mb-5">
+          <i data-lucide="cpu" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-white mb-2">Robotics SDK</h3>
+        <p class="text-neutral-500 text-sm font-light mb-4">Integrate and control construction robots, drones, and autonomous vehicles through PEXI OS.</p>
+        <div class="font-mono text-xs text-neutral-600 bg-white/3 rounded-lg p-3">
+          <span class="text-purple-400">import</span> { RobotSDK } <span class="text-purple-400">from</span> 'pexi'<br>
+          <span class="text-purple-400">const</span> bot = <span class="text-purple-400">new</span> RobotSDK()
+        </div>
+      </div>
+
+      <div class="reveal delay-200 glass rounded-2xl p-8 card-hover card-hover-cyan border border-white/5">
+        <div class="icon-box bg-cyan-500/10 mb-5">
+          <i data-lucide="copy" class="w-5 h-5 text-cyan-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-white mb-2">Digital Twin Toolkit</h3>
+        <p class="text-neutral-500 text-sm font-light mb-4">Create, manage, and sync digital twins with powerful SDK tools and real-time data pipelines.</p>
+        <div class="font-mono text-xs text-neutral-600 bg-white/3 rounded-lg p-3">
+          <span class="text-cyan-400">const</span> twin = <span class="text-cyan-400">await</span> Twin.create()<br>
+          twin.<span class="text-cyan-400">sync</span>({ realTime: <span class="text-emerald-400">true</span> })
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-12 reveal">
+      <button class="btn-primary flex items-center gap-2 mx-auto !py-3 !px-8 !rounded-xl">
+        <i data-lucide="terminal" class="w-4 h-4"></i>
+        Join Developer Program
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GOD MODE SIMULATION ===================== -->
+<section id="godmode" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="reveal relative">
+      <div class="absolute -inset-8 bg-gradient-to-r from-purple-500/5 via-pink-500/5 to-orange-500/5 rounded-3xl blur-2xl"></div>
+      <div class="relative glass-strong rounded-3xl p-8 md:p-12 border border-white/10 text-center overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 via-pink-500 to-orange-500"></div>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-purple-500/20 mb-8">
+          <i data-lucide="sparkles" class="w-3 h-3 text-purple-400"></i>
+          <span class="text-xs text-purple-300 font-medium">Meta-Level Intelligence</span>
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+          Roldley OS <span class="text-gradient-multi">God Mode</span>
+        </h2>
+        <p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto mb-10">
+          The ultimate simulation layer — plan civilizations, simulate planet-scale urban development, and orchestrate all construction systems from a single interface.
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-3xl mx-auto">
+          <div class="glass rounded-xl p-4 text-center border border-white/5">
+            <div class="text-xl mb-1">🧠</div>
+            <div class="text-[10px] text-neutral-500">Self-Improving AI</div>
+          </div>
+          <div class="glass rounded-xl p-4 text-center border border-white/5">
+            <div class="text-xl mb-1">🌍</div>
+            <div class="text-[10px] text-neutral-500">Planet-Scale Planner</div>
+          </div>
+          <div class="glass rounded-xl p-4 text-center border border-white/5">
+            <div class="text-xl mb-1">🏗️</div>
+            <div class="text-[10px] text-neutral-500">Civilization Builder</div>
+          </div>
+          <div class="glass rounded-xl p-4 text-center border border-white/5">
+            <div class="text-xl mb-1">🔄</div>
+            <div class="text-[10px] text-neutral-500">Knowledge Transfer</div>
+          </div>
+          <div class="glass rounded-xl p-4 text-center border border-white/5 col-span-2 md:col-span-1">
+            <div class="text-xl mb-1">📊</div>
+            <div class="text-[10px] text-neutral-500">Economic Simulator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA SECTION ===================== -->
+<section id="cta" class="relative py-32 overflow-hidden">
+  <div class="section-sep max-w-7xl mx-auto mb-32"></div>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="reveal text-center">
+      <h2 class="text-3xl md:text-6xl font-bold tracking-tight mb-6">
+        The Future is<br><span class="text-gradient-blue">Under Construction</span>
+      </h2>
+      <p class="text-neutral-400 font-light text-lg max-w-xl mx-auto mb-10">
+        From simulation to reality — PEXI OS constructs the future before it exists.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button onclick="openDemo()" class="btn-primary flex items-center gap-2 !py-4 !px-10 !rounded-xl !text-base">
+          <i data-lucide="rocket" class="w-5 h-5"></i>
+          Request Access
+        </button>
+        <button class="btn-secondary flex items-center gap-2 !py-4 !px-10 !rounded-xl !text-base">
+          <i data-lucide="mail" class="w-5 h-5"></i>
+          Contact Us
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="relative border-t border-white/5 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <span class="text-white font-bold text-xs">PX</span>
+          </div>
+          <span class="text-white font-semibold text-sm">PEXI OS</span>
+        </div>
+        <p class="text-neutral-600 text-xs font-light leading-relaxed mb-4">
+          From simulation to reality — PEXI OS constructs the future before it exists.
+        </p>
+        <div class="flex items-center gap-3">
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <i data-lucide="youtube" class="w-3.5 h-3.5 text-neutral-500"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <i data-lucide="twitter" class="w-3.5 h-3.5 text-neutral-500"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <i data-lucide="instagram" class="w-3.5 h-3.5 text-neutral-500"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <i data-lucide="github" class="w-3.5 h-3.5 text-neutral-500"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <i data-lucide="linkedin" class="w-3.5 h-3.5 text-neutral-500"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">Product</h4>
+        <div class="space-y-3">
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">About</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Features</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">AI Modules</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Robotics</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Smart Cities</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">Resources</h4>
+        <div class="space-y-3">
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Documentation</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">API Reference</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">SDK Guide</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Blog</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Changelog</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">Company</h4>
+        <div class="space-y-3">
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Careers</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Investors</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Press Kit</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Contact</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Support</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">Legal</h4>
+        <div class="space-y-3">
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Privacy Policy</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Terms of Use</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Security</a>
+          <a href="#" class="block text-xs text-neutral-600 hover:text-neutral-300 transition-colors">Compliance</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-sep mb-8"></div>
+
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-[11px] text-neutral-700">
+        © 2025 PEXI OS by Roldley. All rights reserved.
+      </div>
+      <div class="text-[11px] text-neutral-700">
+        support@buildos.system • Powered by BuildOS + Roldley OS
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== DEMO MODAL ===================== -->
+<div id="demoModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-6" style="background:rgba(0,0,0,0.8);backdrop-filter:blur(10px)">
+  <div class="glass-strong rounded-2xl p-8 max-w-lg w-full border border-white/10 relative animate-fade-in-up">
+    <button onclick="closeDemo()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+      <i data-lucide="x" class="w-4 h-4 text-white"></i>
+    </button>
+    <div class="text-center">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-6">
+        <i data-lucide="play" class="w-7 h-7 text-white"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Launch Demo</h3>
+      <p class="text-neutral-400 text-sm font-light mb-6">Enter a project description and watch PEXI OS generate a complete construction roadmap.</p>
+      <div class="mb-4">
+        <input id="demoInput" type="text" placeholder='e.g. "4-bedroom sustainable home, KES 12M budget"' class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-blue-500/40 transition-colors">
+      </div>
+      <button onclick="runDemo()" class="btn-primary w-full !py-3 !rounded-xl flex items-center justify-center gap-2">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+        Generate BuildPath
+      </button>
+      <div id="demoOutput" class="mt-6 text-left hidden">
+        <div class="glass rounded-xl p-4 border border-white/5">
+          <div class="text-[10px] text-neutral-600 uppercase tracking-wider mb-3">BuildPath AI Output</div>
+          <div id="demoResult" class="font-mono text-xs text-neutral-300 space-y-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== NOTIFICATION TOAST ===================== -->
+<div id="toast" class="fixed bottom-6 right-6 z-[300] hidden">
+  <div class="glass-strong rounded-xl px-5 py-3 border border-white/10 flex items-center gap-3 animate-fade-in-up">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMessage" class="text-sm text-neutral-300"></span>
+  </div>
+</div>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+// Initialize Lucide Icons
+lucide.createIcons();
+
+// ===== PARTICLE CANVAS =====
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const PARTICLE_COUNT = 60;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.4 + 0.1;
+    this.color = ['59,130,246', '139,92,246', '6,182,212', '16,185,129'][Math.floor(Math.random() * 4)];
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+      this.reset();
+    }
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${this.opacity})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  particles.push(new Particle());
+}
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(59,130,246,${0.03 * (1 - dist / 150)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.update();
+    p.draw();
+  });
+  drawLines();
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== SCROLL REVEAL =====
+function revealOnScroll() {
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+    if (top < windowHeight - 80) {
+      el.classList.add('visible');
+    }
+  });
+}
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
+
+// ===== NAVBAR SCROLL EFFECT =====
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  const scroll = window.scrollY;
+  if (scroll > 100) {
+    nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+  } else {
+    nav.style.borderBottomColor = 'rgba(255,255,255,0.04)';
+  }
+  lastScroll = scroll;
+});
+
+// ===== SMOOTH SCROLL =====
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('active');
+  document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+
+// ===== STAT COUNTER =====
+function animateCounters() {
+  const counters = document.querySelectorAll('.stat-number[data-target]');
+  counters.forEach(counter => {
+    const target = parseFloat(counter.dataset.target);
+    const suffix = counter.dataset.suffix || '';
+    const decimal = parseInt(counter.dataset.decimal) || 0;
+    const duration = 2000;
+    const start = performance.now();
+
+    function update(currentTime) {
+      const elapsed = currentTime - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = eased * target;
+      counter.textContent = (decimal > 0 ? current.toFixed(decimal) : Math.floor(current).toLocaleString()) + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// Start counters when hero is visible
+const heroObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      heroObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+heroObserver.observe(document.getElementById('hero'));
+
+// ===== DEMO MODAL =====
+function openDemo() {
+  const modal = document.getElementById('demoModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  document.getElementById('demoOutput').classList.add('hidden');
+  document.getElementById('demoInput').value = '';
+  setTimeout(() => lucide.createIcons(), 100);
+}
+
+function closeDemo() {
+  const modal = document.getElementById('demoModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function runDemo() {
+  const input = document.getElementById('demoInput').value.trim();
+  if (!input) {
+    showToast('Please enter a project description');
+    return;
+  }
+
+  const output = document.getElementById('demoOutput');
+  const result = document.getElementById('demoResult');
+  output.classList.remove('hidden');
+
+  const lines = [
+    { icon: '→', color: 'text-blue-400', text: 'Initializing BuildPath AI...' },
+    { icon: '→', color: 'text-blue-400', text: 'Analyzing project requirements...' },
+    { icon: '✓', color: 'text-emerald-400', text: 'Project type detected: Residential' },
+    { icon: '→', color: 'text-purple-400', text: 'Generating Day 1-30 tasks...' },
+    { icon: '→', color: 'text-purple-400', text: 'Computing material schedules...' },
+    { icon: '✓', color: 'text-emerald-400', text: 'Budget allocation: Foundation 25%, Structure 35%, Finishing 30%, Reserve 10%' },
+    { icon: '→', color: 'text-cyan-400', text: 'Running risk simulation (10,000 cycles)...' },
+    { icon: '✓', color: 'text-emerald-400', text: 'Risk score: LOW (0.04 probability of delay)' },
+    { icon: '→', color: 'text-cyan-400', text: 'Optimizing sustainability actions...' },
+    { icon: '✓', color: 'text-emerald-400', text: '3 contractor recommendations found' },
+    { icon: '★', color: 'text-yellow-400', text: 'BuildPath ready. Project completion: 92% on schedule.' },
+  ];
+
+  result.innerHTML = '';
+  lines.forEach((line, i) => {
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.className = `${line.color}`;
+      div.textContent = `${line.icon} ${line.text}`;
+      div.style.opacity = '0';
+      div.style.transform = 'translateY(5px)';
+      div.style.transition = 'all 0.3s ease';
+      result.appendChild(div);
+      setTimeout(() => {
+        div.style.opacity = '1';
+        div.style.transform = 'translateY(0)';
+      }, 50);
+    }, i * 300);
+  });
+}
+
+// Close modal on outside click
+document.getElementById('demoModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('demoModal')) {
+    closeDemo();
+  }
+});
+
+// ===== TOAST NOTIFICATION =====
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  const msg = document.getElementById('toastMessage');
+  msg.textContent = message;
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 3000);
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeDemo();
+    const menu = document.getElementById('mobileMenu');
+    if (menu.classList.contains('active')) {
+      toggleMobileMenu();
+    }
+  }
+});
+
+// ===== SMOOTH ANCHOR LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// ===== PARALLAX ORB MOVEMENT =====
+document.addEventListener('mousemove', (e) => {
+  const orbs = document.querySelectorAll('.orb');
+  const x = e.clientX / window.innerWidth;
+  const y = e.clientY / window.innerHeight;
+  orbs.forEach((orb, i) => {
+    const speed = (i + 1) * 8;
+    orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+  });
+});
+
+// ===== TYPING EFFECT FOR TERMINAL =====
+const terminalLines = document.querySelectorAll('.font-mono.text-xs.space-y-3 > div');
+terminalLines.forEach((line, i) => {
+  line.style.opacity = '0';
+  line.style.animation = `fadeInUp 0.5s ease-out ${i * 0.15}s forwards`;
+});
+
+// ===== INTERSECTION OBSERVER FOR SECTIONS =====
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('section').forEach(section => {
+  sectionObserver.observe(section);
+});
+
+// ===== ACTIVE NAV LINK HIGHLIGHTING =====
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (window.scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.style.color = '';
+    if (link.getAttribute('href') === `#${current}`) {
+      link.style.color = '#ffffff';
+    }
+  });
+});
+
+// ===== CONSOLE BRANDING =====
+console.log(
+  '%c PEXI OS %c by Roldley ',
+  'background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 8px 12px; font-weight: bold; font-size: 14px; border-radius: 4px 0 0 4px;',
+  'background: #1a1a1a; color: #a3a3a3; padding: 8px 12px; font-size: 14px; border-radius: 0 4px 4px 0;'
+);
+console.log('%cFrom simulation to reality — PEXI OS constructs the future before it exists.', 'color: #3b82f6; font-style: italic;');
+</script>
+
+</body>
+</html>
